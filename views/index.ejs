@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Notes: Capturing Insights</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+</head>
+<body>
+    <div class="container">
+            <h1>Books I’ve read</h1>
+            <form class="tab" action="/addBook" method="post">
+                <input type="submit" name="add" value="Add Book" id="tab" class="tab">
+                <label for="tab"></label>
+            </form>
+            <div>
+                <p style="font-family: 'Georgia', serif;font-size: 20px;line-height: 1.8;;">Welcome to my book summary page! Here, you’ll find detailed notes for each book I read, sorted by my top recommendations, with options to sort by <a href="/?sortBy=title">Title</a>, <a href="/?sortBy=date">Newest</a>, or <a href="/?sortBy=rating">Best</a>. You can use the ISBN numbers provided to find these books at your local library or anywhere else.
+                </p>
+            </div>
+            <% books.forEach(book => { %>
+                <div class="book">
+                    <img src="<%= book.cover_url %>" alt="Book Cover">
+                    <div class="book-details">
+                        <h2><%= book.title %></h2>
+                        <p style="color: #73706C; font-size: 12px;">DATE OF READ: <%= formatDate(book.date_of_read) %> | RECOMMENDATION: <%= book.rating %>/10</p>
+                        <p style="color: #73706C;font-size: 12px;">ISBN: <%= book.isbn %></p>
+                        <p id="title<%= book.id %>" class="para"><%= book.feedback %>   
+                            <button id="edit<%= book.id %>" class="edit"><i class="bi bi-pencil-square"></i></button>
+
+                        </p>
+
+                        <form class="edit" action="/edit" method="post">
+                            <input type="hidden" name="updatedItemId" value="<%= book.id %>">
+                            <textarea id="input<%= book.id %>" class="feedback-input" name="updatedItemTitle" rows="7" cols="50" autocomplete="off" placeholder="Edit feedback" style="display:none;"><%= book.feedback %></textarea>
+                            <button id="done<%= book.id %>" class="done" type="submit" style="display:none;">Done</button>
+                        </form>
+
+                        <form action="/delete" method="post">
+                            <input type="hidden" name="deleteItemId" value="<%= book.id %>">
+                            <button type="submit" class="delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+       </div> 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editButtons = document.querySelectorAll('[id^="edit"]');
+            
+            editButtons.forEach(editButton => {
+                const id = editButton.getAttribute('id').replace('edit', ''); 
+                
+                const doneButton = document.getElementById('done' + id);
+                const titleElement = document.getElementById('title' + id);
+                const inputElement = document.getElementById('input' + id);
+      
+                editButton.addEventListener('click', function() {
+                    titleElement.style.display = 'none'; 
+                    editButton.style.display = 'none'; 
+                    inputElement.style.display = 'block'; 
+                    doneButton.style.display = 'block'; 
+                });
+            });
+        });
+    </script>
+      
+</body>
+</html>
