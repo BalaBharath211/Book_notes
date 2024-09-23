@@ -7,22 +7,23 @@ import dotenv from 'dotenv';
 dotenv.config(); 
 
 const { Client } = pkg;
+const isProduction = process.env.NODE_ENV === 'production';
+
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; 
 
 const db = new Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port:process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL, 
+  ssl: isProduction ? { rejectUnauthorized: false } : false  
 });
 
-db.connect().catch(err => {
-  console.error('Failed to connect to the database:', err);
-  process.exit(1);
-});
+db.connect()
+  .then(() => console.log('Connected to the database'))
+  .catch(err => {
+    console.error('Failed to connect to the database:', err);
+    process.exit(1);
+  });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -134,16 +135,13 @@ app.post("/edit", async(req, res) => {
 
 app.post("/delete", async (req, res) => {
   const id = parseInt(req.body.deleteItemId, 10); 
-  console.log("Received ID:", id);
   
   if (isNaN(id)) {
-    console.log("Invalid ID");
     return res.redirect("/"); 
   }
 
   try {
     await db.query("DELETE FROM books WHERE id=$1", [id]);
-    console.log(`Book with ID ${id} deleted successfully`);
     res.redirect("/"); 
   } catch (err) {
     console.log("Error deleting book:", err);
