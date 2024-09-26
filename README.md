@@ -18,32 +18,32 @@
 - PostgreSQL
 
 # Installation
-  Prerequisites
-- Node.js
-- PostgreSQL
+    Prerequisites
+    - Node.js
+    - PostgreSQL
 
 ## Steps
 1. Clone the repository:
-- git clone https://github.com/yourusername/book-notes.git
-- cd book-notes
+    - git clone https://github.com/yourusername/book-notes.git
+    - cd book-notes
 
 2. Install the dependencies:
-- npm install
+    - npm install
 
 3. Set up PostgreSQL database:
-- Create a PostgreSQL database.
-- Set the database credentials in a .env file:
+    - Create a PostgreSQL database.
+    - Set the database credentials in a .env file:
 
-DB_HOST=your_database_host,
-DB_USER=your_database_user,
-DB_PASS=your_database_password,
-DB_NAME=your_database_name
+        DB_HOST=your_database_host,
+        DB_USER=your_database_user,
+        DB_PASS=your_database_password,
+        DB_NAME=your_database_name
 
 4. Run database migrations (if any):
-npm run migrate
+    - npm run migrate
 
 5. Start the development server:
-npm start
+    - npm start
 
 Open your browser and navigate to http://localhost:3000.
 
